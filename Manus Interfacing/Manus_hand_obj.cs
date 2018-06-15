@@ -121,7 +121,7 @@ namespace manus_interface {
 		    return hand_fingers;
 	    }
 
-        //Get the data for the wrist on the hand
+        //Summary:          Get the data for the wrist on the hand
         public Quaternion get_wrist()
         {
             return wrist_data;
