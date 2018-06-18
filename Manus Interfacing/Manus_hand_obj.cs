@@ -80,14 +80,14 @@ namespace manus_interface {
             ///hand_fingers_manus_profile = fingr;
         }
 	    public void add_vector_fingers(List<Finger> fingr) {
-            hand_fingers = new List<Finger>();
-            Finger[] doe = fingr.ToArray();
-            foreach (Finger d in doe)
-            {
-                hand_fingers.Add(d);
-            }
+            //hand_fingers = new List<Finger>();
+            //Finger[] doe = fingr.ToArray();
+            //foreach (Finger d in doe)
+            //{
+            //    hand_fingers.Add(d);
+            //}
 
-            ///hand_fingers = fingr;
+            hand_fingers = fingr;
 	    }
 
 	    //Set the raw hand data array to the private array in this object. 

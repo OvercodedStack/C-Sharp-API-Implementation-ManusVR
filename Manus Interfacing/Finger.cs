@@ -43,13 +43,13 @@ namespace manus_interface
         }
         public Finger(List<double> array_in)
         {
-            bones_doubles = new List<double>();
-            double[] doe = array_in.ToArray();
-            foreach (double d in doe)
-            {
-                bones_doubles.Add(d);
-            }
-
+            //bones_doubles = new List<double>();
+            //double[] doe = array_in.ToArray();
+            //foreach (double d in doe)
+            //{
+            //    bones_doubles.Add(d);
+            //}
+            bones_doubles = array_in;
             //bones_doubles.Clear();
             //bones_doubles = new List<double>(array_in);
         }
