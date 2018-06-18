@@ -18,10 +18,12 @@ using UnityEngine;
 using ManusVR;
 using manus_interface;
 
+
 public class Manus_hand_model_inputter : MonoBehaviour
 {
     [SerializeField]
-    private string hand_side;                   //Which hand side to use 
+    //private string hand_side;                   //Which hand side to use 
+    public bool is_right;
     public Vector3 hand_position;               //Adjust the postion of the hand object
     public Quaternion hand_orientation;         //Adjust the orientation of the hand object 
     private Quaternion[] finger_orientations;   //Adjust the orientation of the finger objects 
@@ -39,6 +41,7 @@ public class Manus_hand_model_inputter : MonoBehaviour
     {
         fingers_occulus = new GameObject[15]; //Gameobject array for each of the bones. 
         string wrist_string, offset;
+        string hand_side;
         //string fing_0, fing_1, fing_2, fing_3, fing_4, fing_5, fing_6, fing_7, fing_8, fing_9, fing_10, fing_11, fing_12, fing_13, fing_14; //Finger strings illeterable; 
         string[] fings = new string[15];
         ///string indx_1, indx_2, indx_3, mid_1, mid_2, mid_3;
@@ -48,8 +51,9 @@ public class Manus_hand_model_inputter : MonoBehaviour
 
         //Each bone in the Occulus hand has a unique identifier that links it back to the mesh. By using this method, one can illeterate through it and assign the unique IDs 
 
-        if (hand_side == "right_hand")                                  //Check if my hand is left or right and setup accordingly 
+        if (is_right)                                  //Check if my hand is left or right and setup accordingly 
         {
+            hand_side = "RightHand";
             hand_side_right = true;
             type_of_device = device_type_t.GLOVE_RIGHT;
             wrist_string = "RightHand/hands:r_hand_world";
@@ -63,7 +67,7 @@ public class Manus_hand_model_inputter : MonoBehaviour
             fings[6] = offset + "/hands:b_r_ring1";
             fings[7] = fings[6] + "/hands:b_r_ring2";
             fings[8] = fings[7] + "/hands:b_r_ring3";
-            fings[9] = offset + "/hands:b_r_pinky1";
+            fings[9] = offset + "/hands:b_r_pinky0/hands:b_r_pinky1";
             fings[10] = fings[9] + "/hands:b_r_pinky2";
             fings[11] = fings[10] + "/hands:b_r_pinky3";
             fings[12] = offset + "/hands:b_r_thumb1";
@@ -72,25 +76,26 @@ public class Manus_hand_model_inputter : MonoBehaviour
         }
         else
         {
-            hand_side_right = false; //Left hand becomes the 0th 
+            hand_side = "LeftHand";
+            hand_side_right = false;                                    //Left hand becomes the 0th 
             type_of_device = device_type_t.GLOVE_LEFT;
             wrist_string = "LeftHand/hands:l_hand_world";
             offset = wrist_string + "/hands:b_l_hand";
-            fings[0] = offset + "/hands:b_l_index1";      //index bone 1 
-            fings[1] = fings[0] + "/hands:b_l_index2";      //index bone 2 
-            fings[2] = fings[1] + "/hands:b_l_index3";      //index bone 3 
-            fings[3] = offset + "/hands:b_l_middle1";      //middle bone 1 
-            fings[4] = fings[3] + "/hands:b_l_middle2";       //middle bone 2 
-            fings[5] = fings[4] + "/hands:b_l_middle3";       //middle bone 3 
-            fings[6] = offset + "/hands:b_l_ring1";        //ring bone 1
-            fings[7] = fings[6] + "/hands:b_l_ring2";         //ring bone 1
-            fings[8] = fings[7] + "/hands:b_l_ring3";         //ring bone 1
-            fings[9] = offset + "/hands:b_l_pinky1";       //pinky bone 1
-            fings[10] = fings[9] + "/hands:b_l_pinky2";        //pinky bone 2
-            fings[11] = fings[10] + "/hands:b_l_pinky3";        //pinky bone 3
-            fings[12] = offset + "/hands:b_l_thumb1";       //thumb bone 1
-            fings[13] = fings[12] + "/hands:b_l_thumb2";        //thumb bone 2
-            fings[14] = fings[13] + "/hands:b_l_thumb3";        //thumb bone 3
+            fings[0] = offset + "/hands:b_l_index1";                    //index bone 1 
+            fings[1] = fings[0] + "/hands:b_l_index2";                  //index bone 2 
+            fings[2] = fings[1] + "/hands:b_l_index3";                  //index bone 3 
+            fings[3] = offset + "/hands:b_l_middle1";                   //middle bone 1 
+            fings[4] = fings[3] + "/hands:b_l_middle2";                 //middle bone 2 
+            fings[5] = fings[4] + "/hands:b_l_middle3";                 //middle bone 3 
+            fings[6] = offset + "/hands:b_l_ring1";                     //ring bone 1
+            fings[7] = fings[6] + "/hands:b_l_ring2";                   //ring bone 1
+            fings[8] = fings[7] + "/hands:b_l_ring3";                   //ring bone 1
+            fings[9] = offset + "/hands:b_l_pinky0/hands:b_l_pinky1";   //pinky bone 1
+            fings[10] = fings[9] + "/hands:b_l_pinky2";                 //pinky bone 2
+            fings[11] = fings[10] + "/hands:b_l_pinky3";                //pinky bone 3
+            fings[12] = offset + "/hands:b_l_thumb1";                   //thumb bone 1
+            fings[13] = fings[12] + "/hands:b_l_thumb2";                //thumb bone 2
+            fings[14] = fings[13] + "/hands:b_l_thumb3";                //thumb bone 3
         }
         hand_mesh = GameObject.Find(hand_side);                         //Find that object
         my_wrist = GameObject.Find(wrist_string);                       //and that one too. 
@@ -106,15 +111,26 @@ public class Manus_hand_model_inputter : MonoBehaviour
     {
         Manus_hand_obj hand = manus_interpret.get_hand(type_of_device); //Select glove
         List<Finger> orientations = hand.get_hand();
-        my_wrist.transform.rotation = hand.get_wrist();                                         //Get the rotation of the quaternion and set equal
+        List<double> raw_fings = hand.get_raw_hand();
+        Vector3 temp_q = hand.get_wrist().eulerAngles;                                         //Get the rotation of the quaternion and set equal
+         
+        my_wrist.transform.localEulerAngles = new Vector3 (temp_q.y,temp_q.x,temp_q.z); 
+
+
         hand_orientation = hand.get_wrist();
         //Setting the orientation of the fingers. 
-        check_me_lol = orientations[2].get_finger_data()[1].rotation;
-        fingers_occulus[0].transform.rotation = orientations[0].get_finger_data()[1].rotation;
-        fingers_occulus[3].transform.rotation = orientations[1].get_finger_data()[1].rotation;
-        fingers_occulus[6].transform.rotation = orientations[2].get_finger_data()[1].rotation;
-        //fingers_occulus[9].transform.rotation = orientations[3].get_finger_data()[0].rotation;
-        //fingers_occulus[12].transform.rotation = orientations[4].get_finger_data()[0].rotation;
+        //check_me_lol = orientations[2].get_finger_data()[2].rotation;
+        //Quaternion temp_q = orientations[0].get_finger_data()[2].rotation;
+         //Quaternion out_q = new Quaternion((float) (temp_q.x * 180 / 3.14168), (float)(temp_q.y * 180 / 3.14168), (float)(temp_q.z * 180 / 3.14168), (float)(-temp_q.w * 180 / 3.14168));
+       // Quaternion out_q = new Quaternion(0, 0, (float)(temp_q.w * 180 / 3.14168), 0);
+        //check_me_lol = out_q;
+        //fingers_occulus[0].transform.localRotation = out_q;
+
+        //fingers_occulus[0].transform.localRotation = orientations[1].get_finger_data()[2].rotation;
+        //fingers_occulus[3].transform.localRotation = orientations[2].get_finger_data()[2].rotation;
+        //fingers_occulus[6].transform.localRotation = orientations[3].get_finger_data()[2].rotation;
+        //fingers_occulus[9].transform.localRotation = orientations[4].get_finger_data()[2].rotation;
+        //fingers_occulus[12].transform.localRotation = orientations[0].get_finger_data()[2].rotation;
 
 
 

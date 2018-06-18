@@ -43,6 +43,9 @@ namespace manus_interface
         [SerializeField]
         public bool Is_right;
 
+        public Quaternion my_quart;
+        public int select_option = 2;
+
         //Connected 
         bool isL, isR;
 
@@ -157,6 +160,10 @@ namespace manus_interface
                 middle = ls[1];
                 ring = ls[2];
                 thumb = ls[3];
+                List<Finger> tempF = this.hands[1].get_hand();
+                List<pose> ps = tempF[1].get_finger_data();
+                my_quart = ps[2].rotation;
+
             }
             else
             {
@@ -166,7 +173,9 @@ namespace manus_interface
                 middle = ls[1];
                 ring = ls[2];
                 thumb = ls[3];
- 
+                List<Finger> tempF = this.hands[0].get_hand();
+                List<pose> ps = tempF[2].get_finger_data();
+                my_quart = ps[select_option].rotation;
             }
             //Quaternion q = hands[0].get_wrist();
 
@@ -186,7 +195,7 @@ namespace manus_interface
             Manus.ManusGetProfile(session, out my_profile);    ///Wrong assumption, it does not provide real-time data. 
             Manus.ManusGetHand(session, which_hand_side, out hand);
 
-            Manus.ManusGetHand_id(session, 2602524395, which_hand_side, out hand);
+            //Manus.ManusGetHand_id(session, 2602524395, which_hand_side, out hand);
             
             Manus.ManusGetBatteryLevel(session, which_hand_side, out bat_value);
 
