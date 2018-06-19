@@ -23,13 +23,14 @@ public class Manus_hand_model_inputter : MonoBehaviour
 {
     [SerializeField]
     //private string hand_side;                   //Which hand side to use 
-    public Vector3 test_my_finger;
-    public bool is_right;
+    //public Vector3 test_my_finger;
+    //public Vector3 my_other_finger;
+    public bool is_right = false;
     public double[] raw_list;
     public Vector3 hand_position;               //Adjust the postion of the hand object
     public Quaternion hand_orientation;         //Adjust the orientation of the hand object 
     private Quaternion[] finger_orientations;   //Adjust the orientation of the finger objects 
-    public Quaternion check_me_lol;
+    //public Quaternion check_me_lol;
     private double[] finger_compression;        //Finger compression
     private bool hand_side_right;
     GameObject hand_mesh;                       //Setup GameObjects
@@ -53,51 +54,51 @@ public class Manus_hand_model_inputter : MonoBehaviour
 
         //Each bone in the Occulus hand has a unique identifier that links it back to the mesh. By using this method, one can illeterate through it and assign the unique IDs 
 
-        if (is_right)                                  //Check if my hand is left or right and setup accordingly 
+        if (is_right == true)                                  //Check if my hand is left or right and setup accordingly 
         {
             hand_side = "RightHand";
             hand_side_right = true;
             type_of_device = device_type_t.GLOVE_RIGHT;
             wrist_string = "RightHand/hands:r_hand_world";
-            offset = wrist_string   + "/hands:b_r_hand";
-            fings[0] = offset       + "/hands:b_r_index1";
-            fings[1] = fings[0]     + "/hands:b_r_index2";
-            fings[2] = fings[1]     + "/hands:b_r_index3";
-            fings[3] = offset       + "/hands:b_r_middle1";
-            fings[4] = fings[3]     + "/hands:b_r_middle2";
-            fings[5] = fings[4]     + "/hands:b_r_middle3";
-            fings[6] = offset       + "/hands:b_r_ring1";
-            fings[7] = fings[6]     + "/hands:b_r_ring2";
-            fings[8] = fings[7]     + "/hands:b_r_ring3";
-            fings[9] = offset       + "/hands:b_r_pinky0/hands:b_r_pinky1";
-            fings[10] = fings[9]    + "/hands:b_r_pinky2";
-            fings[11] = fings[10]   + "/hands:b_r_pinky3";
-            fings[12] = offset      + "/hands:b_r_thumb1";
-            fings[13] = fings[12]   + "/hands:b_r_thumb2";
-            fings[14] = fings[13]   + "/hands:b_r_thumb3";
+            offset = wrist_string + "/hands:b_r_hand";
+            fings[0] = offset + "/hands:b_r_index1";
+            fings[1] = fings[0] + "/hands:b_r_index2";
+            fings[2] = fings[1] + "/hands:b_r_index3";
+            fings[3] = offset + "/hands:b_r_middle1";
+            fings[4] = fings[3] + "/hands:b_r_middle2";
+            fings[5] = fings[4] + "/hands:b_r_middle3";
+            fings[6] = offset + "/hands:b_r_ring1";
+            fings[7] = fings[6] + "/hands:b_r_ring2";
+            fings[8] = fings[7] + "/hands:b_r_ring3";
+            fings[9] = offset + "/hands:b_r_pinky0/hands:b_r_pinky1";
+            fings[10] = fings[9] + "/hands:b_r_pinky2";
+            fings[11] = fings[10] + "/hands:b_r_pinky3";
+            fings[12] = offset + "/hands:b_r_thumb1";
+            fings[13] = fings[12] + "/hands:b_r_thumb2";
+            fings[14] = fings[13] + "/hands:b_r_thumb3";
         }
         else
         {
             hand_side = "LeftHand";
             hand_side_right = false;                                    //Left hand becomes the 0th 
             type_of_device = device_type_t.GLOVE_LEFT;
-            wrist_string            = "LeftHand/hands:l_hand_world";
-            offset   = wrist_string   + "/hands:b_l_hand";
-            fings[0] = offset       + "/hands:b_l_index1";                    //index bone 1 
-            fings[1] = fings[0]     + "/hands:b_l_index2";                  //index bone 2 
-            fings[2] = fings[1]     + "/hands:b_l_index3";                  //index bone 3 
-            fings[3] = offset       + "/hands:b_l_middle1";                   //middle bone 1 
-            fings[4] = fings[3]     + "/hands:b_l_middle2";                 //middle bone 2 
-            fings[5] = fings[4]     + "/hands:b_l_middle3";                 //middle bone 3 
-            fings[6] = offset       + "/hands:b_l_ring1";                     //ring bone 1
-            fings[7] = fings[6]     + "/hands:b_l_ring2";                   //ring bone 1
-            fings[8] = fings[7]     + "/hands:b_l_ring3";                   //ring bone 1
-            fings[9] = offset       + "/hands:b_l_pinky0/hands:b_l_pinky1";   //pinky bone 1
-            fings[10] = fings[9]    + "/hands:b_l_pinky2";                 //pinky bone 2
-            fings[11] = fings[10]   + "/hands:b_l_pinky3";                //pinky bone 3
-            fings[12] = offset      + "/hands:b_l_thumb1";                   //thumb bone 1
-            fings[13] = fings[12]   + "/hands:b_l_thumb2";                //thumb bone 2
-            fings[14] = fings[13]   + "/hands:b_l_thumb3";                //thumb bone 3
+            wrist_string = "LeftHand/hands:l_hand_world";
+            offset = wrist_string + "/hands:b_l_hand";
+            fings[0] = offset + "/hands:b_l_index1";                    //index bone 1 
+            fings[1] = fings[0] + "/hands:b_l_index2";                  //index bone 2 
+            fings[2] = fings[1] + "/hands:b_l_index3";                  //index bone 3 
+            fings[3] = offset + "/hands:b_l_middle1";                   //middle bone 1 
+            fings[4] = fings[3] + "/hands:b_l_middle2";                 //middle bone 2 
+            fings[5] = fings[4] + "/hands:b_l_middle3";                 //middle bone 3 
+            fings[6] = offset + "/hands:b_l_ring1";                     //ring bone 1
+            fings[7] = fings[6] + "/hands:b_l_ring2";                   //ring bone 1
+            fings[8] = fings[7] + "/hands:b_l_ring3";                   //ring bone 1
+            fings[9] = offset + "/hands:b_l_pinky0/hands:b_l_pinky1";   //pinky bone 1
+            fings[10] = fings[9] + "/hands:b_l_pinky2";                 //pinky bone 2
+            fings[11] = fings[10] + "/hands:b_l_pinky3";                //pinky bone 3
+            fings[12] = offset + "/hands:b_l_thumb1";                   //thumb bone 1
+            fings[13] = fings[12] + "/hands:b_l_thumb2";                //thumb bone 2
+            fings[14] = fings[13] + "/hands:b_l_thumb3";                //thumb bone 3
         }
         hand_mesh = GameObject.Find(hand_side);                         //Find that object
         my_wrist = GameObject.Find(wrist_string);                       //and that one too. 
@@ -115,9 +116,12 @@ public class Manus_hand_model_inputter : MonoBehaviour
         List<Finger> orientations = hand.get_hand();
         List<double> raw_fings = hand.get_raw_hand();
         raw_list = raw_fings.ToArray();
-        Vector3 temp_q = hand.get_wrist().eulerAngles;                                         //Get the rotation of the quaternion and set equal
-         
-        my_wrist.transform.localEulerAngles = new Vector3 (temp_q.y,temp_q.x,temp_q.z); 
+        //Vector3 temp_q = hand.get_wrist().eulerAngles;  
+        Quaternion q = hand.get_wrist();
+
+        //Get the rotation of the quaternion and set equal
+        my_wrist.transform.localRotation =  new Quaternion(q.y,q.x,q.z,-q.w);
+        //my_wrist.transform.eulerAngles = new Vector3 (-temp_q.y,-temp_q.x,temp_q.z); 
 
 
         hand_orientation = hand.get_wrist();
@@ -133,8 +137,9 @@ public class Manus_hand_model_inputter : MonoBehaviour
 
         //Index Finger
         Vector3 out_vector = new Vector3(0, 0, -100F * (float)raw_fings[7]); 
+
         fingers_occulus[1].transform.localEulerAngles = out_vector;
-        test_my_finger = out_vector;
+        //test_my_finger = out_vector;
         out_vector = new Vector3(0, 0, -72F * (float)raw_fings[6]);
         fingers_occulus[2].transform.localEulerAngles = out_vector;
 

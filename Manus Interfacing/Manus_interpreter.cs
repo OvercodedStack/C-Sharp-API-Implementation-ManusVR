@@ -43,6 +43,7 @@ namespace manus_interface
         [SerializeField]
         public bool Is_right;
 
+        public int my_finger_opt = 2; 
         public Quaternion my_quart;
         public int select_option = 2;
 
@@ -174,7 +175,7 @@ namespace manus_interface
                 ring = ls[2];
                 thumb = ls[3];
                 List<Finger> tempF = this.hands[0].get_hand();
-                List<pose> ps = tempF[2].get_finger_data();
+                List<pose> ps = tempF[my_finger_opt].get_finger_data();
                 my_quart = ps[select_option].rotation;
             }
             //Quaternion q = hands[0].get_wrist();
@@ -257,9 +258,10 @@ namespace manus_interface
         private void add_hand_fingers(ref manus_hand_t device, ref device_type_t side, ref Manus_hand_obj manus_hand)
         {
             List<Finger> single_hand_array = new List<Finger>();   //Finger array
-            List<pose> temp_finger = new List<pose>();           //Temporary array for bones.
+            List<pose> temp_finger;                                //Temporary array for bones.
             for (int i = 0; i < 5; i++)//Illiterate through the fingers
             {
+                temp_finger = new List<pose>();
                 for (int j = 0; j < 5; j++)//Illiterate through the poses. 
                 {
                     pose temp_pose = new pose();                     //Temporary pose format.
