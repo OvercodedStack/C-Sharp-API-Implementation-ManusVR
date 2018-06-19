@@ -370,20 +370,21 @@ namespace manus_interface
         private void add_hand_fingers_raw(ref manus_hand_raw_t hand, ref device_type_t side, ref Manus_hand_obj manus_hand)
         {
             List<double> single_hand_array_raw = new List<double>();
-            if (side == device_type_t.GLOVE_LEFT)
+            for (int h = 0; h < 10; h++)
             {
-                for (int h = 0; h < 5; h++)
-                {
-                    single_hand_array_raw.Add(hand.finger_sensor[h]);
-                }
+                single_hand_array_raw.Add(hand.finger_sensor[h]);
             }
-            else
-            {
-                for (int h = 5; h < 10; h++)
-                {
-                    single_hand_array_raw.Add(hand.finger_sensor[h]);
-                }
-            }
+            //if (side == device_type_t.GLOVE_LEFT)
+            //{
+
+            //}
+            //else
+            //{
+            //    for (int h = 0; h < 10; h++)
+            //    {
+            //        single_hand_array_raw.Add(hand.finger_sensor[h]);
+            //    }
+            //}
             manus_hand.set_hand_raw(single_hand_array_raw);
         }
     }
