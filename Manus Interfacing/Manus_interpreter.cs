@@ -40,6 +40,13 @@ namespace manus_interface
         private double ring;
         [SerializeField]
         private double thumb;
+        [SerializeField]
+        public bool Is_right;
+
+        public int my_finger_opt = 2; 
+        public Quaternion my_quart;
+        public Vector3 my_vec;
+        public int select_option = 2;
 
         //Connected 
         bool isL, isR;
@@ -111,7 +118,7 @@ namespace manus_interface
         //I start the program. 
         void Start()
         {
-            Debug.Log("I tried.");
+            Debug.Log("Starting Manus_API");
             session = new IntPtr();
             lefth = new manus_hand_t();
             righth = new manus_hand_t();
@@ -125,7 +132,7 @@ namespace manus_interface
             isL = false;
 
             Manus.ManusInit(out session);
-            Debug.Log("I is done.");
+            Debug.Log("Done.");
 
         }
 
@@ -146,16 +153,47 @@ namespace manus_interface
             add_manus_hand(ref righth, ref rightraw, device_type_t.GLOVE_RIGHT, right_arm, myProfileR);
 
             //Finger[] f = this.hands[0].get_hand_profile_manus().ToArray();
-            double[] ls = this.hands[1].get_raw_hand().ToArray();
-            bat_value = this.hands[1].get_bat();
-            index = ls[0];
-            middle = ls[1];
-            ring = ls[2];
-            thumb = ls[3];
 
-            Quaternion q = hands[0].get_wrist();
+            if (Is_right)
+            {
+                double[] ls = this.hands[1].get_raw_hand().ToArray();
+                bat_value = this.hands[1].get_bat();
+                index = ls[0];
+                middle = ls[1];
+                ring = ls[2];
+                thumb = ls[3];
+                //List<Finger> tempF = this.hands[1].get_hand();
+                //List<pose> ps = tempF[my_finger_opt].get_finger_data();
+                //my_quart = ps[select_option].rotation;
+                my_quart = this.hands[1].get_wrist();
+                my_quart.x = (my_quart.x * 180F) / 3.14165F;
+                my_quart.y = (my_quart.y * 180F) / 3.14165F;
+                my_quart.z = (my_quart.z * 180F) / 3.14165F;
+                my_quart.w = (my_quart.w * 180F) / 3.14165F;
+                my_vec = my_quart.eulerAngles;
 
-            Debug.Log("Wrist data= X: " + q.x + "Y: " + q.y + "Z: " + q.z + "W: " + q.w);
+            }
+            else
+            {
+                double[] ls = this.hands[0].get_raw_hand().ToArray();
+                bat_value = this.hands[0].get_bat();
+                index = ls[0];
+                middle = ls[1];
+                ring = ls[2];
+                thumb = ls[3];
+                //List<Finger> tempF = this.hands[0].get_hand();
+                //List<pose> ps = tempF[my_finger_opt].get_finger_data();
+                //my_quart = ps[select_option].rotation;
+                my_quart = this.hands[0].get_wrist();
+                my_quart.x = (my_quart.x * 180F) / 3.14165F;
+                my_quart.y = (my_quart.y * 180F) / 3.14165F;
+                my_quart.z = (my_quart.z * 180F) / 3.14165F;
+                my_quart.w = (my_quart.w * 180F) / 3.14165F;
+                my_vec = my_quart.eulerAngles;
+            }
+            //Quaternion q = hands[0].get_wrist();
+
+           // Debug.Log("Wrist data= X: " + q.x + "Y: " + q.y + "Z: " + q.z + "W: " + q.w);
 
             //Debug.Log(carpal_inx);
     }
@@ -170,6 +208,8 @@ namespace manus_interface
             Manus.ManusGetHandRaw(session, which_hand_side, out raw_hand);
             Manus.ManusGetProfile(session, out my_profile);    ///Wrong assumption, it does not provide real-time data. 
             Manus.ManusGetHand(session, which_hand_side, out hand);
+
+            //Manus.ManusGetHand_id(session, 2602524395, which_hand_side, out hand);
             
             Manus.ManusGetBatteryLevel(session, which_hand_side, out bat_value);
 
@@ -231,12 +271,13 @@ namespace manus_interface
         private void add_hand_fingers(ref manus_hand_t device, ref device_type_t side, ref Manus_hand_obj manus_hand)
         {
             List<Finger> single_hand_array = new List<Finger>();   //Finger array
-            pose temp_pose;                     //Temporary pose format.
-            List<pose> temp_finger = new List<pose>();           //Temporary array for bones.
+            List<pose> temp_finger;                                //Temporary array for bones.
             for (int i = 0; i < 5; i++)//Illiterate through the fingers
             {
+                temp_finger = new List<pose>();
                 for (int j = 0; j < 5; j++)//Illiterate through the poses. 
                 {
+                    pose temp_pose = new pose();                     //Temporary pose format.
                     temp_pose.rotation = process_quat(device.fingers[i].joints[j].rotation);
                     temp_pose.translation = process_vector(device.fingers[i].joints[j].translation);
                     temp_finger.Add(temp_pose);//Add poses to a temporay finger array
@@ -244,12 +285,16 @@ namespace manus_interface
                 Finger real_finger = new Finger(temp_finger); //Instantiate a finger class
                 single_hand_array.Add(real_finger);           //Add the finger to the hand
             }
+
+
             //**NEW** Pass imu Data to device. 
             quat_t[] quarts = device.raw.imu;
             Quaternion[] quarts_to_write = new Quaternion[2];
             quarts_to_write[0] = process_quat(quarts[0]);
             quarts_to_write[1] = process_quat(quarts[1]);
-            manus_hand.set_imus(quarts_to_write);        
+            manus_hand.set_imus(quarts_to_write);     
+            
+
             manus_hand.add_vector_fingers(single_hand_array); //Add in vector data from manus for each individual bone. 
             manus_hand.set_wrist(process_quat(device.wrist)); //**NEW** Add in wrist data into the manus_hand_obj
 
@@ -340,20 +385,21 @@ namespace manus_interface
         private void add_hand_fingers_raw(ref manus_hand_raw_t hand, ref device_type_t side, ref Manus_hand_obj manus_hand)
         {
             List<double> single_hand_array_raw = new List<double>();
-            if (side == device_type_t.GLOVE_LEFT)
+            for (int h = 0; h < 10; h++)
             {
-                for (int h = 0; h < 5; h++)
-                {
-                    single_hand_array_raw.Add(hand.finger_sensor[h]);
-                }
+                single_hand_array_raw.Add(hand.finger_sensor[h]);
             }
-            else
-            {
-                for (int h = 5; h < 10; h++)
-                {
-                    single_hand_array_raw.Add(hand.finger_sensor[h]);
-                }
-            }
+            //if (side == device_type_t.GLOVE_LEFT)
+            //{
+
+            //}
+            //else
+            //{
+            //    for (int h = 0; h < 10; h++)
+            //    {
+            //        single_hand_array_raw.Add(hand.finger_sensor[h]);
+            //    }
+            //}
             manus_hand.set_hand_raw(single_hand_array_raw);
         }
     }

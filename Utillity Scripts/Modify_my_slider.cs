@@ -31,11 +31,11 @@ public class Modify_my_slider : MonoBehaviour {
 	void Update () {
         Manus_hand_obj hand = manus_inpt.get_hand(device_type_t.GLOVE_RIGHT);   //Select glove
         double[] hand_compression_ratios = hand.get_raw_hand().ToArray();       //Array conversion
-        z1 = (float)hand_compression_ratios[0]; //Index
-        z2 = (float)hand_compression_ratios[1]; //Middle
+        z1 = (float)hand_compression_ratios[6]; //Index
+        z2 = (float)hand_compression_ratios[4]; //Middle
         z3 = (float)hand_compression_ratios[2]; //Ring
-        z4 = (float)hand_compression_ratios[3]; //Pinky
-        z5 = (float)hand_compression_ratios[4]; //Thumb
+        z4 = (float)hand_compression_ratios[0]; //Pinky
+        z5 = (float)hand_compression_ratios[8]; //Thumb
 
         {
             /*a
