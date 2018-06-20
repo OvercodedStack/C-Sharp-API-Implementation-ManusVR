@@ -45,6 +45,7 @@ namespace manus_interface
 
         public int my_finger_opt = 2; 
         public Quaternion my_quart;
+        public Vector3 my_vec;
         public int select_option = 2;
 
         //Connected 
@@ -161,9 +162,15 @@ namespace manus_interface
                 middle = ls[1];
                 ring = ls[2];
                 thumb = ls[3];
-                List<Finger> tempF = this.hands[1].get_hand();
-                List<pose> ps = tempF[1].get_finger_data();
-                my_quart = ps[2].rotation;
+                //List<Finger> tempF = this.hands[1].get_hand();
+                //List<pose> ps = tempF[my_finger_opt].get_finger_data();
+                //my_quart = ps[select_option].rotation;
+                my_quart = this.hands[1].get_wrist();
+                my_quart.x = (my_quart.x * 180F) / 3.14165F;
+                my_quart.y = (my_quart.y * 180F) / 3.14165F;
+                my_quart.z = (my_quart.z * 180F) / 3.14165F;
+                my_quart.w = (my_quart.w * 180F) / 3.14165F;
+                my_vec = my_quart.eulerAngles;
 
             }
             else
@@ -174,9 +181,15 @@ namespace manus_interface
                 middle = ls[1];
                 ring = ls[2];
                 thumb = ls[3];
-                List<Finger> tempF = this.hands[0].get_hand();
-                List<pose> ps = tempF[my_finger_opt].get_finger_data();
-                my_quart = ps[select_option].rotation;
+                //List<Finger> tempF = this.hands[0].get_hand();
+                //List<pose> ps = tempF[my_finger_opt].get_finger_data();
+                //my_quart = ps[select_option].rotation;
+                my_quart = this.hands[0].get_wrist();
+                my_quart.x = (my_quart.x * 180F) / 3.14165F;
+                my_quart.y = (my_quart.y * 180F) / 3.14165F;
+                my_quart.z = (my_quart.z * 180F) / 3.14165F;
+                my_quart.w = (my_quart.w * 180F) / 3.14165F;
+                my_vec = my_quart.eulerAngles;
             }
             //Quaternion q = hands[0].get_wrist();
 

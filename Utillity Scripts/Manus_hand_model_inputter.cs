@@ -26,6 +26,7 @@ public class Manus_hand_model_inputter : MonoBehaviour
     //public Vector3 test_my_finger;
     //public Vector3 my_other_finger;
     public bool is_right = false;
+    public bool enable_manus_rotation = false;
     public double[] raw_list;
     public Vector3 hand_position;               //Adjust the postion of the hand object
     public Quaternion hand_orientation;         //Adjust the orientation of the hand object 
@@ -115,34 +116,37 @@ public class Manus_hand_model_inputter : MonoBehaviour
         Manus_hand_obj hand = manus_interpret.get_hand(type_of_device); //Select glove
         List<Finger> orientations = hand.get_hand();
         List<double> raw_fings = hand.get_raw_hand();
+        //List<pose> poses_orien = orientations
         raw_list = raw_fings.ToArray();
-        //Vector3 temp_q = hand.get_wrist().eulerAngles;  
-        Quaternion q = hand.get_wrist();
+
 
         //Get the rotation of the quaternion and set equal
-        my_wrist.transform.localRotation =  new Quaternion(q.y,q.x,q.z,-q.w);
-        //my_wrist.transform.eulerAngles = new Vector3 (-temp_q.y,-temp_q.x,temp_q.z); 
-
+        if (enable_manus_rotation)
+        {
+            Vector3 temp_q = hand.get_wrist().eulerAngles;
+            Quaternion q = hand.get_wrist();
+            my_wrist.transform.eulerAngles = new Vector3(temp_q.x, temp_q.z, temp_q.y);
+        }
 
         hand_orientation = hand.get_wrist();
-        //Setting the orientation of the fingers. 
-        //check_me_lol = orientations[2].get_finger_data()[2].rotation;
-        //Quaternion temp_q = orientations[0].get_finger_data()[2].rotation;
-        //Quaternion out_q = new Quaternion((float) (temp_q.x * 180 / 3.14168), (float)(temp_q.y * 180 / 3.14168), (float)(temp_q.z * 180 / 3.14168), (float)(-temp_q.w * 180 / 3.14168));
-        // Quaternion out_q = new Quaternion(0, 0, (float)(temp_q.w * 180 / 3.14168), 0);
-        //check_me_lol = out_q;
-        //fingers_occulus[0].transform.localRotation = out_q;
+        ////Setting the orientation of the fingers. 
+        ////check_me_lol = orientations[2].get_finger_data()[2].rotation;
+        ////Quaternion temp_q = orientations[0].get_finger_data()[2].rotation;
+        ////Quaternion out_q = new Quaternion((float) (temp_q.x * 180 / 3.14168), (float)(temp_q.y * 180 / 3.14168), (float)(temp_q.z * 180 / 3.14168), (float)(-temp_q.w * 180 / 3.14168));
+        //// Quaternion out_q = new Quaternion(0, 0, (float)(temp_q.w * 180 / 3.14168), 0);
+        ////check_me_lol = out_q;
+        ////fingers_occulus[0].transform.localRotation = out_q;
 
 
 
         //Index Finger
         Vector3 out_vector = new Vector3(0, 0, -100F * (float)raw_fings[7]); 
-
         fingers_occulus[1].transform.localEulerAngles = out_vector;
-        //test_my_finger = out_vector;
         out_vector = new Vector3(0, 0, -72F * (float)raw_fings[6]);
         fingers_occulus[2].transform.localEulerAngles = out_vector;
 
+        out_vector = new Vector3(-74.875F, 106.624F, ((float)raw_fings[7] * (float)raw_fings[6] * -59.667F )+ 54.667F );
+        fingers_occulus[0].transform.localEulerAngles = out_vector;
 
         //Middle Finger
         out_vector = new Vector3(0, 0,  -115F * (float)raw_fings[5]);
@@ -150,6 +154,8 @@ public class Manus_hand_model_inputter : MonoBehaviour
         out_vector = new Vector3(0, 0, -105F * (float)raw_fings[4]);
         fingers_occulus[5].transform.localEulerAngles = out_vector;
 
+        out_vector = new Vector3(-80.399F, 18.783F, ((float)raw_fings[7] * (float)raw_fings[6] * -73.9F) +151.9F);
+        fingers_occulus[3].transform.localEulerAngles = out_vector;
 
         //Ring Finger
         out_vector = new Vector3(0, 0,  -100F* (float)raw_fings[3]);
@@ -157,6 +163,8 @@ public class Manus_hand_model_inputter : MonoBehaviour
         out_vector = new Vector3(0, 0, -110F * (float)raw_fings[2]);
         fingers_occulus[8].transform.localEulerAngles = out_vector;
 
+        out_vector = new Vector3(-69.153F, -21.521F, ((float)raw_fings[3] * (float)raw_fings[2] * -68.448F) - 166.516F);
+        fingers_occulus[6].transform.localEulerAngles = out_vector;
 
         //Pinky Finger
         out_vector = new Vector3(0, 0, -90F * (float)raw_fings[1]);
@@ -164,6 +172,8 @@ public class Manus_hand_model_inputter : MonoBehaviour
         out_vector = new Vector3(0, 0, -100F * (float)raw_fings[0]);
         fingers_occulus[11].transform.localEulerAngles = out_vector;
 
+        out_vector = new Vector3(-1.022F, -2.061F, (((float)raw_fings[1]+0.4F) * (float)raw_fings[0] * -83.518F) + -169.447F);
+        fingers_occulus[9].transform.localEulerAngles = out_vector;
 
         //Thumb Finger
         out_vector = new Vector3(0, 0, -60F * (float)raw_fings[9]);
@@ -171,11 +181,7 @@ public class Manus_hand_model_inputter : MonoBehaviour
         out_vector = new Vector3(0, 0, -90F * (float)raw_fings[8]);
         fingers_occulus[14].transform.localEulerAngles = out_vector;
 
-
-        //fingers_occulus[0].transform.localRotation = orientations[1].get_finger_data()[2].rotation;
-        //fingers_occulus[3].transform.localRotation = orientations[2].get_finger_data()[2].rotation;
-        //fingers_occulus[6].transform.localRotation = orientations[3].get_finger_data()[2].rotation;
-        //fingers_occulus[9].transform.localRotation = orientations[4].get_finger_data()[2].rotation;
-        //fingers_occulus[12].transform.localRotation = orientations[0].get_finger_data()[2].rotation;
+        out_vector = new Vector3(-11.73F, 183.41F, ((float)raw_fings[9] * (float)raw_fings[8] * -39.229F) + 27.229F);
+        fingers_occulus[12].transform.localEulerAngles = out_vector;
     }
 }
