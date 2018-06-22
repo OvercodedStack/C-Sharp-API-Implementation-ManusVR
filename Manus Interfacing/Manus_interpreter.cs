@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Original System: Manus_interpreter.h.cpp
+//  Original System: Manus_interpreter.cs
 //  Subsystem:       Human-Robot Interaction
 //  Workfile:        Manus_interpreter.cs
 //  Revision:        1.1 - 6/11/2018

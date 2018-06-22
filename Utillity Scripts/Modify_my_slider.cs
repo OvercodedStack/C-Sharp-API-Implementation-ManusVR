@@ -37,52 +37,6 @@ public class Modify_my_slider : MonoBehaviour {
         z4 = (float)hand_compression_ratios[0]; //Pinky
         z5 = (float)hand_compression_ratios[8]; //Thumb
 
-        {
-            /*a
-            if (z1 > 1)
-            {
-                z1 = 1;
-            }
-            if (z2 > 1)
-            {
-                z2 = 1;
-            }
-            if (z3 > 1)
-            {
-                z3 = 1;
-            }
-            if (z4 > 1)
-            {
-                z4 = 1;
-            }
-            if (z5 > 1)
-            {
-                z5 = 1; 
-            }
-            if (z1 < 0)
-            {
-                z1 = 0;
-            }
-            if (z2 < 0)
-            {
-                z2 = 0;
-            }
-            if (z3 < 0)
-            {
-                z3 = 0;
-            }
-            if (z4 < 0)
-            {
-                z4 = 0;
-            }
-            if (z5 < 0)
-            {
-                z5 = 0;
-            }
-            */
-        }
-
-
         //Slider Overrides
         sliders_on_gameObj[0].value = z5 * 111F - 85.0F;    //Rotate the base
         sliders_on_gameObj[1].value = z1 * 350.0F - 175.0F; //Move the second arm
