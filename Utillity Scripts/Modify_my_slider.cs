@@ -25,7 +25,9 @@ public class Modify_my_slider : MonoBehaviour {
     //Initialization
 	void Start () {
         sliders_on_gameObj = this.GetComponentsInChildren<Slider>();    //Get my components
-        manus_inpt = this.GetComponent<Manus_interpreter>();            //Get my manus API
+        //manus_inpt = this.GetComponent<Manus_interpreter>();            //Get my manus API
+        GameObject game_thing = GameObject.Find("Manus_VR_Driver");     //Seek global API
+        manus_inpt = game_thing.GetComponent<Manus_interpreter>();
     }
 
 	void Update () {

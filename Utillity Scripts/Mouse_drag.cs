@@ -17,6 +17,7 @@ using UnityEngine;
 
 public class Mouse_drag : MonoBehaviour {
     public float distance;
+    public float additive_ratio = 1.0f;
 
 
     private void OnMouseDown()
@@ -40,11 +41,11 @@ public class Mouse_drag : MonoBehaviour {
     {
         if (Input.GetButton("Q"))
         {
-            distance++;
+            distance += additive_ratio;
         }
         if (Input.GetButton("E"))
         {
-            distance--;
+            distance += -additive_ratio;
         }
     }
 }
