@@ -31,7 +31,6 @@ public class Manus_hand_model_inputter : MonoBehaviour
     public Vector3 hand_position;               //Adjust the postion of the hand object
     public Quaternion hand_orientation;         //Adjust the orientation of the hand object 
     private Quaternion[] finger_orientations;   //Adjust the orientation of the finger objects 
-    //public Quaternion check_me_lol;
     private double[] finger_compression;        //Finger compression
     private bool hand_side_right;
     GameObject hand_mesh;                       //Setup GameObjects

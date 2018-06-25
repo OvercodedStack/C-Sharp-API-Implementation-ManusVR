@@ -12,56 +12,112 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //Some Code inherited from https://forum.unity.com/threads/moving-main-camera-with-mouse.119525/
+//Scrolling and orbit inherited from https://www.youtube.com/watch?v=bVo0YLLO43s 
 using UnityEngine;
 
-public class Camera_controls : MonoBehaviour {
+public class Camera_controls : MonoBehaviour
+{
     //Limits for camera 
-    private float x_cam_rot_up      = 90;
-    private float y_cam_rot_up      = 90;
-    private float z_cam_rot_up      = 90;
-    private float x_cam_rot_down    = -90;
-    private float y_cam_rot_down    = -90;
-    private float z_cam_rot_down    = -90;
+    protected Transform _XForm_Camera;
+    protected Transform _XForm_Parent;
+    protected Vector3 _LocalRotation;
+    protected float _CameraDistance = 10f;
+    private Vector3 shift;
 
     //Speed Limits
-    public float horizontal_speed   = 40;
-    public float vertical_speed     = 40;
-    public float foward_speed       = 40;
-    public float back_speed         = 40; 
+    public float horizontal_speed = 1;
+    public float vertical_speed = 1;
+    public float foward_speed = 1;
+    public float turn_speed = 1; 
+    //public bool CameraDisabled = true;
+ 
+    public float ScrollSensitvity = 2f;
+    public float OrbitDampening = 10f;
+    public float ScrollDampening = 6f;
 
-	// Update is called once per frame
-	void Update () {
-        Vector3 shift; 
-        while (Input.GetMouseButtonDown(1))
+    void Start()
+    {
+        this._XForm_Camera = this.transform;
+        this._XForm_Parent = this.transform.parent;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        //if ()
+        //    CameraDisabled = !CameraDisabled;
+
+        
+        if (Input.GetMouseButton(1))
+        //
         {
-            float hor = horizontal_speed * Input.GetAxis("Mouse Y");
-            float ver = vertical_speed * Input.GetAxis("Mouse X");
-            transform.Translate(ver, hor, 0);
+
+            _LocalRotation.x += Input.GetAxis("Mouse X") * turn_speed;
+            _LocalRotation.y += Input.GetAxis("Mouse Y") * turn_speed;
+
+            //Clamp the y Rotation to horizon and not flipping over at the top
+            if (_LocalRotation.y < 0f)
+                _LocalRotation.y = 0f;
+            else if (_LocalRotation.y > 90f)
+                _LocalRotation.y = 90f;
+
+            //float hor = horizontal_speed * Input.GetAxis("Mouse Y");
+            //float ver = vertical_speed * Input.GetAxis("Mouse X");
+
+
+            //Clamp the y Rotation to horizon and not flipping over at the top
+            //if (this.transform.localRotation.eulerAngles.y < 0f)
+            //    hor = 0f;
+            //else if (this.transform.localRotation.eulerAngles.y > 90f)
+            //    hor = 0;
+
+            //transform.Rotate(hor, ver, 0);
+
+
+            //if (Input.GetButton("LShift"))
+            if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+            {
+                float ScrollAmount = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitvity;
+                ScrollAmount *= (this._CameraDistance * 0.3f);
+                this._CameraDistance += ScrollAmount * -1f;
+                this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
+            }
+
+            //Actual Camera Rig Transformations
+            Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
+            this._XForm_Parent.rotation = Quaternion.Lerp(this._XForm_Parent.rotation, QT, Time.deltaTime * OrbitDampening);
+
+            if (this._XForm_Camera.localPosition.z != this._CameraDistance * -1f)
+            {
+                this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
+            }
         }
 
-        if( Input.GetKeyDown("Foward"))
+
+
+
+        //Conditionals adjusted for camera viewset
+        if (Input.GetButton("Foward"))
         {
-            shift = new Vector3(foward_speed, 0, 0);
-            Debug.Log("FOWARD YO");
-            this.transform.Translate(shift);
+            shift = new Vector3(0, foward_speed, 0);
+            _XForm_Parent.transform.Translate(shift);
         }
 
-        if (Input.GetKeyDown("Back"))
+        if (Input.GetButton("Back"))
         {
-            shift = new Vector3(back_speed, 0, 0);
-            this.transform.Translate(shift);
+            shift = new Vector3(0, -foward_speed, 0);
+            _XForm_Parent.transform.Translate(shift);
+        }
+        if (Input.GetButton("Left"))
+        {
+            shift = new Vector3(-horizontal_speed, 0, 0);
+            _XForm_Parent.transform.Translate(shift);
         }
 
-        if (Input.GetKeyDown("Left"))
+        if (Input.GetButton("Right"))
         {
-            shift = new Vector3(0, horizontal_speed, 0);
-            this.transform.Translate( shift);
-        }
-
-        if (Input.GetKeyDown("Right"))
-        {
-            shift = new Vector3(0, -horizontal_speed, 0);
-            this.transform.Translate(shift);
+            shift = new Vector3(horizontal_speed, 0, 0);
+            _XForm_Parent.transform.Translate(shift);
         }
 
     }
