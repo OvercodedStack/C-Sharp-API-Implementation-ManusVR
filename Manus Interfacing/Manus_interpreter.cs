@@ -254,6 +254,18 @@ namespace manus_interface
             }
         }
 
+        public Manus_hand_obj get_hand(int side)
+        {
+            if (side == 0)
+            {
+                return hands[0];
+            }
+            else
+            {
+                return hands[1];
+            }
+        }
+
         //Add the calcuations for the arm calculations on the manus API
         private void add_arm_calc(ref manus_hand_t hand, ref ik_body_t body_side, ref ik_profile_t my_profile, ref Manus_hand_obj my_hand)
         {
