@@ -46,7 +46,7 @@ public class Manus_To_TCP : MonoBehaviour {
         {
             string stringed_array = null;
             double[] raw_values_manus = device0.get_raw_hand().ToArray() ;
-            raw_values_manus += device1.get_raw_hand().ToArray();
+            //raw_values_manus += device1.get_raw_hand().ToArray();
 
             return stringed_array;
         }
