@@ -319,6 +319,10 @@ namespace manus_interface
             vec_out.x = (float)vect.x;
             vec_out.y = (float)vect.y;
             vec_out.z = (float)vect.z;
+            if (vec_out.x == float.NaN)
+            {
+                vec_out = Vector3.zero;
+            }
             return vec_out;
         }
 
@@ -330,6 +334,13 @@ namespace manus_interface
             quat_out.y = (float)quat.y;
             quat_out.z = (float)quat.z;
             quat_out.w = (float)quat.w;
+            if (quat_out.x == float.NaN)
+            {
+                quat_out.x = 0;
+                quat_out.y = 0;
+                quat_out.z = 0;
+                quat_out.w = 0;
+            }
             return quat_out;
         }
 
