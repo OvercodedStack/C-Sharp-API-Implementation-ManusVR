@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using manus_interface;
 
-
+/// <summary>
+///  OBSOLETE DO NOT USE.
+/// </summary>
 public class pickup_manus : MonoBehaviour {
     Collider collider_this;
     Collision collisions_on_this;
