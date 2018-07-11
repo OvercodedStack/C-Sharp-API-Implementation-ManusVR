@@ -408,21 +408,23 @@ namespace manus_interface
         private void add_hand_fingers_raw(ref manus_hand_raw_t hand, ref device_type_t side, ref Manus_hand_obj manus_hand)
         {
             List<double> single_hand_array_raw = new List<double>();
+            bool set_grab = false;
             for (int h = 0; h < 10; h++)
             {
                 single_hand_array_raw.Add(hand.finger_sensor[h]);
             }
-            //if (side == device_type_t.GLOVE_LEFT)
-            //{
 
-            //}
-            //else
-            //{
-            //    for (int h = 0; h < 10; h++)
-            //    {
-            //        single_hand_array_raw.Add(hand.finger_sensor[h]);
-            //    }
-            //}
+            int count = 0;
+            foreach(double i in single_hand_array_raw)
+            {
+                if (i > .9)
+                {
+                    count += 1;
+                }
+            }
+            if (count > 8)
+                set_grab = true;
+            manus_hand.set_grabbing(set_grab);
             manus_hand.set_hand_raw(single_hand_array_raw);
         }
     }

@@ -23,6 +23,7 @@ namespace manus_interface {
         private double lower_arm_length, lower_arm_neck;
         private byte bat_level;
         private Vector3 upperNeckOffset;
+        private bool is_grabbing;
 
         //In practive, there are 10 bands (Resistive elastic sensors) for each finger on the manus.
         //This array contains all of those measurements starting from the left to rightmsot finger.  
@@ -131,6 +132,16 @@ namespace manus_interface {
         public byte get_bat()
         {
             return bat_level;
+        }
+
+        public void set_grabbing(bool grab)
+        {
+            is_grabbing = grab;
+        }
+
+        public bool get_grabbing()
+        {
+            return is_grabbing;
         }
 
         //Slightly useless, returns a preset for the manus hand profile
