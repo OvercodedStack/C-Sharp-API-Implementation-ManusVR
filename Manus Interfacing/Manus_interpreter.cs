@@ -417,12 +417,12 @@ namespace manus_interface
             int count = 0;
             foreach(double i in single_hand_array_raw)
             {
-                if (i > .9)
+                if (i > .5)
                 {
                     count += 1;
                 }
             }
-            if (count > 8)
+            if (count > 5)
                 set_grab = true;
             manus_hand.set_grabbing(set_grab);
             manus_hand.set_hand_raw(single_hand_array_raw);
