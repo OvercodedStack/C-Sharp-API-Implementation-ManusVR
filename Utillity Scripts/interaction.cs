@@ -41,8 +41,56 @@ public class interaction : MonoBehaviour {
         }
         //Copy position of controller
         current_rigidBody.transform.position = transform.position;
+        //current_rigidBody.transform.rotation = transform.rotation;
 
         //Set to the Controller
+        attach_joint.connectedBody = current_rigidBody;
+
+    }
+
+
+    //Methods to rotate around, this one is working specifically for trackpad rotation
+    public void Rotate(float x, float y)
+    {
+        float multiplier = 2.5f;
+        current_rigidBody = Get_Nearest_RigidBody();
+
+        if (!current_rigidBody)
+        {
+            return;
+        }
+        Vector3 rotation_new = current_rigidBody.transform.localEulerAngles;
+        rotation_new.x += multiplier * x;
+        rotation_new.y += multiplier * y; 
+
+        current_rigidBody.transform.localEulerAngles = rotation_new;
+        attach_joint.connectedBody = current_rigidBody;
+
+    }
+
+    //Rotating around quaternion
+    public void Rotate(Quaternion rotation)
+    {
+        current_rigidBody = Get_Nearest_RigidBody();
+
+        if (!current_rigidBody)
+        {
+            return;
+        }
+        current_rigidBody.transform.rotation = rotation;
+        attach_joint.connectedBody = current_rigidBody;
+
+    }
+
+    public void Rotate()
+    {
+        current_rigidBody = Get_Nearest_RigidBody();
+
+        if (!current_rigidBody)
+        {
+            return;
+        }
+        current_rigidBody.transform.rotation = transform.rotation;
         attach_joint.connectedBody = current_rigidBody;
 
     }

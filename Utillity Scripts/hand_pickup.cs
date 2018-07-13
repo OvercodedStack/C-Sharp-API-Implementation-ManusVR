@@ -15,20 +15,26 @@
 using UnityEngine;
 using manus_interface;
 
-public class hand_pickup : MonoBehaviour {
+public class hand_pickup : MonoBehaviour
+{
     //Locate interpreter
     Manus_interpreter manus_inpt;
     GameObject target_object;
     public bool is_right;
     public bool is_grab;
     public Vector3 distance_to_target;
+    public GameObject Manus_API;
     public string name;
+    public bool is_thumbs_up;
     private interaction interact;
+    private double[] finger_array; // Temp array to collect finger array values
 
     // Use this for initialization
-    void Start () {
-        GameObject game_thing = GameObject.Find("Manus_VR_Driver");     //Seek global API
-        manus_inpt = game_thing.GetComponent<Manus_interpreter>();
+    void Start()
+    {
+        //GameObject game_thing = GameObject.Find("Manus_VR_Driver");     //Seek global API
+
+        manus_inpt = Manus_API.GetComponent<Manus_interpreter>();
         interact = this.GetComponent<interaction>();
     }
 
@@ -47,14 +53,29 @@ public class hand_pickup : MonoBehaviour {
 
     private void Update()
     {
-        if (is_right)
+        is_grab = manus_inpt.get_hand(is_right).get_grabbing(); //Rightmost hand
+        finger_array = manus_inpt.get_hand(is_right).get_raw_hand().ToArray();
+        int counter = 0;
+        
+        for (int i = 0; i < 8; i++)
+        {        
+            if (finger_array[i] > .85)
+            {
+                counter++;
+            }
+        }
+
+        if (counter >= 7 && finger_array[8] < .3 && finger_array[9] < .3)
         {
-            is_grab = manus_inpt.get_hand(1).get_grabbing(); //Rightmost hand
+            is_thumbs_up = true;
+            interact.Rotate();
+
         }
         else
         {
-            is_grab = manus_inpt.get_hand(0).get_grabbing();
+            is_thumbs_up = false; 
         }
+
 
         if (is_grab)
         {
@@ -65,31 +86,9 @@ public class hand_pickup : MonoBehaviour {
         {
             interact.Drop(this.GetComponent<Rigidbody>());
         }
+
+       
+
     }
-
-
-
-
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    if (is_right)
-    //    {
-    //        is_grab = manus_inpt.get_hand(1).get_grabbing(); //Rightmost hand
-    //    }
-    //    else
-    //    {
-    //        is_grab = manus_inpt.get_hand(0).get_grabbing();
-    //    }
-    //    //is_grab = true;
-    //    if (is_grab)
-    //    {
-    //        target_object.transform.position = distance_to_target + this.transform.position;
-    //    }
-    //}
-
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    Debug.Log("Un-Clicked"); 
-    //}
 }
 

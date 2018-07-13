@@ -18,7 +18,7 @@ using UnityEngine;
 
 public class gripper_kinematic : MonoBehaviour {
     private GameObject gripper_left, gripper_right;
-    private Vector3 manipulator_grip; 
+    private Vector3 manipulator_grip_L, manipulator_grip_R; 
     private float max_limit = 0.3f;
     private float min_limit = 0.075f;
     //private VIVE_controller controller;
@@ -42,17 +42,21 @@ public class gripper_kinematic : MonoBehaviour {
         
         //Set a float that goes from 0.000 - 1.000
         //controller.get_ratio();
-
-
         update_grippers(grip_ratio);
 	}
 
+    public float get_ratio()
+    {
+        return grip_ratio;
+    }
+
     void update_grippers(float close_ratio)
     {
-        float my_grip_ratio = 0.225f * close_ratio;
-        manipulator_grip = new Vector3(0, 2, my_grip_ratio);
-        gripper_left.transform.localPosition = manipulator_grip;
-        gripper_right.transform.localPosition = -manipulator_grip;
+        float my_grip_ratio = 0.3f - (0.225f * close_ratio);
+        manipulator_grip_L = new Vector3(0, 2, my_grip_ratio);
+        manipulator_grip_R = new Vector3(0, 2, -my_grip_ratio);
+        gripper_left.transform.localPosition = manipulator_grip_L;
+        gripper_right.transform.localPosition = manipulator_grip_R;
 
     }
 }

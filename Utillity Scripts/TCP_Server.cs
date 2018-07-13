@@ -49,6 +49,11 @@ namespace TPC_Server
             //}
         }
 
+        public void set_msg(string msg_out)
+        {
+            IPC_comms_message = msg_out;
+        }
+
         /// <summary> 	
         /// Runs in background TcpServerThread; Handles incomming TcpClient requests 	
         /// </summary> 	

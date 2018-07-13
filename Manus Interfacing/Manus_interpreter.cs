@@ -43,7 +43,7 @@ namespace manus_interface
         [SerializeField]
         public bool Is_right;
 
-        public int my_finger_opt = 2; 
+        public int my_finger_opt = 2;
         public Quaternion my_quart;
         public Vector3 my_vec;
         public int select_option = 2;
@@ -98,11 +98,11 @@ namespace manus_interface
 
         void print_quat(Quaternion quart)
         {
-            Debug.Log( "Printing Quarternion: " +
+            Debug.Log("Printing Quarternion: " +
         "X: " + quart.x +
         "Y: " + quart.y +
         "Z: " + quart.z +
-        "W: " + quart.w 
+        "W: " + quart.w
         );
         }
 
@@ -111,7 +111,7 @@ namespace manus_interface
             Debug.Log("Printing Vector: " +
         "X: " + vec.x +
         "Y: " + vec.y +
-        "Z: " + vec.z 
+        "Z: " + vec.z
         );
         }
 
@@ -138,7 +138,7 @@ namespace manus_interface
 
 
         //Data cleaner for data recieved for double values from the Manus.
-        void merge_value<T>(T output_value,T input_value)
+        void merge_value<T>(T output_value, T input_value)
         {
             output_value = input_value;
         }
@@ -193,10 +193,10 @@ namespace manus_interface
             }
             //Quaternion q = hands[0].get_wrist();
 
-           // Debug.Log("Wrist data= X: " + q.x + "Y: " + q.y + "Z: " + q.z + "W: " + q.w);
+            // Debug.Log("Wrist data= X: " + q.x + "Y: " + q.y + "Z: " + q.z + "W: " + q.w);
 
             //Debug.Log(carpal_inx);
-    }
+        }
 
         //Function that phrases in a single finger 
         private void add_manus_hand(ref manus_hand_t hand, ref manus_hand_raw_t raw_hand, device_type_t which_hand_side, ik_body_t body_side, ik_profile_t my_profile)
@@ -210,7 +210,7 @@ namespace manus_interface
             Manus.ManusGetHand(session, which_hand_side, out hand);
 
             //Manus.ManusGetHand_id(session, 2602524395, which_hand_side, out hand);
-            
+
             Manus.ManusGetBatteryLevel(session, which_hand_side, out bat_value);
 
             //Set Battery level
@@ -224,7 +224,7 @@ namespace manus_interface
 
             //Set manus_profile finger data
             add_manus_profile_hands(ref my_profile, ref hand_in_use);
-            
+
             //Set regular Manus hand data
             add_hand_fingers(ref hand, ref which_hand_side, ref hand_in_use);
 
@@ -254,17 +254,25 @@ namespace manus_interface
             }
         }
 
+        //Using an int
         public Manus_hand_obj get_hand(int side)
         {
-            if (side == 0)
-            {
-                return hands[0];
-            }
-            else
-            {
+            return hands[side];
+        }
+
+        //Using a bool 
+        public Manus_hand_obj get_hand(bool side)
+        {
+            if (side)
+            {//Right Hand
                 return hands[1];
             }
+            else
+            { //Left Hand
+                return hands[0];
+            }
         }
+
 
         //Add the calcuations for the arm calculations on the manus API
         private void add_arm_calc(ref manus_hand_t hand, ref ik_body_t body_side, ref ik_profile_t my_profile, ref Manus_hand_obj my_hand)
@@ -304,8 +312,8 @@ namespace manus_interface
             Quaternion[] quarts_to_write = new Quaternion[2];
             quarts_to_write[0] = process_quat(quarts[0]);
             quarts_to_write[1] = process_quat(quarts[1]);
-            manus_hand.set_imus(quarts_to_write);     
-            
+            manus_hand.set_imus(quarts_to_write);
+
 
             manus_hand.add_vector_fingers(single_hand_array); //Add in vector data from manus for each individual bone. 
             manus_hand.set_wrist(process_quat(device.wrist)); //**NEW** Add in wrist data into the manus_hand_obj
@@ -409,25 +417,43 @@ namespace manus_interface
         {
             List<double> single_hand_array_raw = new List<double>();
             bool set_grab = false;
+            bool set_thumbs_up = false;
             for (int h = 0; h < 10; h++)
             {
                 single_hand_array_raw.Add(hand.finger_sensor[h]);
             }
 
-            int count = 0;
-            foreach(double i in single_hand_array_raw)
+            int count_grab = 0;
+            int count_thumbs_up = 0;
+
+
+            //If the finger is compressed beyond .75, add as a compressed finger
+            foreach (double i in single_hand_array_raw)
             {
-                if (i > .5)
-                {
-                    count += 1;
-                }
+                if (i > .75)
+                    count_grab++;
+                //if (i > .95)
+                //    count_thumbs_up++;
             }
-            if (count > 5)
+            //if ( single_hand_array_raw[8] < .3 && single_hand_array_raw[9] < .3 && count_thumbs_up >= 7)
+            //{
+            //    set_thumbs_up = true;
+            //}
+
+            //If more than 8 fingers compressed, set grab. 
+            if (count_grab > 8)
                 set_grab = true;
+
+
+
+
             manus_hand.set_grabbing(set_grab);
             manus_hand.set_hand_raw(single_hand_array_raw);
         }
+
+
+
     }
 }
 //######################################################################################################################################
- 
+

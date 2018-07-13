@@ -10,7 +10,14 @@
 //  ===========
 //  Data phraser from Manus to TPC server. 
 //
+//  NOT IN USE
+//
+//
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +29,7 @@ using TPC_Server;
 public class Manus_To_TCP : MonoBehaviour {
     TCP_Server server;
     Manus_interpreter interpreter;
+    ur5_kinematics angle_controller;
 
 	// Use this for initialization
 	void Start () {
@@ -33,10 +41,18 @@ public class Manus_To_TCP : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        string converted_string_manus = consodiliate_strings();
-        server.IPC_comms_message = converted_string_manus;
+        //convert_array
+        //string converted_string_manus = consodiliate_strings();
+        ////server.IPC_comms_message = converted_string_manus;
+        //server.SendMessage();
+
 	}
 
+
+    //string convert_array()
+    //{
+
+    //}
 
     string consodiliate_strings()
     {
