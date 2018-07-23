@@ -34,6 +34,8 @@ In addition, there is a previous implementation by Megan Zimmerman that utilized
 
 While not the best way of learning how to use this API, this unity project extensively used this API and contains a few scripts that can be used to move data around if need be. The best way to learn it will be to navigate to  Assets>scenes >Box_wall_test.unity https://github.com/OvercodedStack/Manus_VR_UR5_Repo 
 
+The prefabs folder also contains some prefab objects containing hands with Manus VR API integrated (although it might be an old version at this point).
+
 The gameobjects containing the hands have most of the code integrated under a child gameobject as left/right-hand. You can also see any additional code that goes in the background if you're interested in manipulations. 
 
 Please note that while the project was developed with the VIVE/OpenVR system, it is NOT a requirement if you have different intentions. 
