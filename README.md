@@ -2,6 +2,8 @@
 Author: **Esteban Segarra**
 Primary mantainer: **Esteban Segarra**
 
+# Introduction
+
 This is a parallel project running alongside the C++ implementation of the Manus VR hand set, which can be found [here](https://github.com/OvercodedStack/C-Plus-Plus-API-Implementation-Manus-VR). This API aims to be as efficient as possible while combining the data collected from the Manus VR devices and stringing them together into a data structure that's more sensible than what the Manus VR SDK provides at present (Manus VR SDK in use: v1.1.1 with the 64-bit implementation). The API can work with one or two hands simultaneously connected to the computer.
 
 This project was heavily developed for use under Unity 3D to run as a stand-alone scripts that run on the Unity scene. This project alson includes some utility scripts which could be used to better understand the ManusVR data. 
